@@ -3,28 +3,6 @@
 const { error } = require("console");
 const fs = require("fs");
 
-// try {
-//   fs.writeFileSync("data/test.txt", "Hello World synchronous");
-// } catch (error) {
-//   console.log(error);
-// }
-
-// fs.writeFile("data/test.txt", "Hello world async", (error) => {
-//   console.log(error);
-// });
-
-// Sync
-// const data = fs.readFileSync("data/test.txt", "utf-8");
-// console.log(data);
-
-// Asycn
-// fs.readFile("data/test.txt", "utf-8", (error, data) => {
-//   if (error) {
-//     throw error;
-//   }
-//   console.log(data);
-// });
-
 // Readline
 const readline = require("readline");
 const rl = readline.createInterface({
@@ -47,7 +25,6 @@ rl.question("Siapa nama Anda? ", (nama) => {
 
     fs.writeFileSync("data/contact.json", JSON.stringify(contacts));
 
-    // console.log(`Halo ${nama}. ${hp}`);
     rl.close();
   });
 });

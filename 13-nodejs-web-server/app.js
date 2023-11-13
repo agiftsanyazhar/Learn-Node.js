@@ -33,33 +33,6 @@ const server = http
         renderHtml("./index.html", res);
         break;
     }
-
-    // if (url === "/about") {
-    //   renderHtml("./about.html", res);
-    //   //   fs.readFile("./about.html", (error, data) => {
-    //   //     if (error) {
-    //   //       res.writeHead(404);
-    //   //       res.write("Error: File not found");
-    //   //     } else {
-    //   //       res.write(data);
-    //   //     }
-    //   //     res.end();
-    //   //   });
-    // } else if (url === "/contact") {
-    //   renderHtml("./contact.html", res);
-    // } else {
-    //   renderHtml("./index.html", res);
-    //   //   res.write("Hello world");
-    //   //   fs.readFile("./index.html", (error, data) => {
-    //   //     if (error) {
-    //   //       res.writeHead(404);
-    //   //       res.write("Error: File not found");
-    //   //     } else {
-    //   //       res.write(data);
-    //   //     }
-    //   //     res.end();
-    //   //   });
-    // }
   })
   .listen(port, () => {
     console.log(`Server is listening on port ${port}`);
