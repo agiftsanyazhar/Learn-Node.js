@@ -22,7 +22,9 @@ app.get("/contact", (req, res) => {
 });
 
 app.get("/product/:id", (req, res) => {
-  res.send("Product ID: " + req.params.id);
+  res.send(
+    `Product ID:  ${req.params.id} <br> Category ID: ${req.query.category}`
+  );
 });
 
 app.use("/", (req, res) => {
