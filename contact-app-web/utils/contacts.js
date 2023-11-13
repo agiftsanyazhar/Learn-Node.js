@@ -42,14 +42,33 @@ const storeContact = (contact) => {
   saveContacts(contacts);
 };
 
+const updateContact = (contactBaru) => {
+  const contacts = loadContacts();
+
+  const filteredContacts = contacts.filter(
+    (contact) => contact.name !== contactBaru.oldName
+  );
+  delete contactBaru.oldName;
+  filteredContacts.push(contactBaru);
+  saveContacts(filteredContacts);
+};
+
 const checkDuplicate = (name) => {
   const contacts = loadContacts();
   return contacts.find((contact) => contact.name === name);
+};
+
+const destroyContact = (name) => {
+  const contacts = loadContacts();
+  const filteredContacts = contacts.filter((contact) => contact.name !== name);
+  saveContacts(filteredContacts);
 };
 
 module.exports = {
   loadContacts,
   findContact,
   storeContact,
+  updateContact,
   checkDuplicate,
+  destroyContact,
 };

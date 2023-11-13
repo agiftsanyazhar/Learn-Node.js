@@ -19,6 +19,17 @@
           <a href="/contact" class="btn btn-success card-link"
             ><i class="bi bi-arrow-left"></i
           ></a>
+          <a
+            href="/contact/edit/<%= contact.name %>"
+            class="btn btn-warning card-link text-white"
+            ><i class="bi bi-pencil-square"></i
+          ></a>
+          <a
+            href="/contact/destroy/<%= contact.name %>"
+            class="btn btn-danger card-link"
+            onclick="return confirm('Are you sure?')"
+            ><i class="bi bi-trash"></i
+          ></a>
         </div>
       </div>
       <%}%>
