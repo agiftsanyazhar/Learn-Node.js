@@ -12,19 +12,17 @@ if (!fs.existsSync(dataPath)) {
   fs.writeFileSync(dataPath, "[]", "utf-8");
 }
 
-const loadContact = () => {
+const loadContacts = () => {
   const fileBuffer = fs.readFileSync("data/contacts.json", "utf-8");
   const contacts = JSON.parse(fileBuffer);
   return contacts;
 };
 
 const findContact = (name) => {
-  const contacts = loadContact();
+  const contacts = loadContacts();
 
-  // Clean up the name parameter.
   name = name.trim().toLowerCase();
 
-  // Find the contact with the matching name.
   const contact = contacts.find((contact) => {
     return contact.name.toLocaleLowerCase() === name;
   });
@@ -32,7 +30,26 @@ const findContact = (name) => {
   return contact;
 };
 
+const saveContacts = (contacts) => {
+  fs.writeFileSync("data/contacts.json", JSON.stringify(contacts));
+};
+
+const storeContact = (contact) => {
+  const contacts = loadContacts();
+
+  contacts.push(contact);
+
+  saveContacts(contacts);
+};
+
+const checkDuplicate = (name) => {
+  const contacts = loadContacts();
+  return contacts.find((contact) => contact.name === name);
+};
+
 module.exports = {
-  loadContact,
+  loadContacts,
   findContact,
+  storeContact,
+  checkDuplicate,
 };

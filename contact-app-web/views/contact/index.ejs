@@ -3,6 +3,13 @@
     <div class="col-md-8">
       <h2><%= title %></h2>
 
+      <% if (msg.length !== 0) { %>
+      <div class="alert alert-success" role="alert"><%= msg %></div>
+      <% } %>
+
+      <a href="/contact/create" class="btn btn-success"
+        ><i class="bi bi-plus"></i
+      ></a>
       <table class="table">
         <thead>
           <tr>
