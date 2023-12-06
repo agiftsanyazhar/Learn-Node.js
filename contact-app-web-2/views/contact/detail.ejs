@@ -24,12 +24,22 @@
             class="btn btn-warning card-link text-white"
             ><i class="bi bi-pencil-square"></i
           ></a>
-          <a
+          <!-- <a
             href="/contact/destroy/<%= contacts.name %>"
             class="btn btn-danger card-link"
             onclick="return confirm('Are you sure?')"
             ><i class="bi bi-trash"></i
-          ></a>
+          ></a> -->
+          <form method="POST" action="/contact?_method=DELETE" class="d-inline">
+            <input type="hidden" name="name" value="<%= contacts.name %>" />
+            <button
+              type="submit"
+              class="btn btn-danger"
+              onclick="return confirm('Are you sure?')"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </form>
         </div>
       </div>
       <%}%>

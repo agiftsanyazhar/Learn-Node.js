@@ -1,6 +1,9 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 
+const { body, validationResult, check } = require("express-validator");
+const methodOverride = require("method-override");
+
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
@@ -10,6 +13,8 @@ const contact = require("./model/contact");
 
 const app = express();
 const port = 3000;
+
+app.use(methodOverride("_method"));
 
 // EJS
 app.set("view engine", "ejs");
@@ -79,6 +84,45 @@ app.get("/contact", async (req, res) => {
   });
 });
 
+app.get("/contact/create", (req, res) => {
+  res.render("contact/create", {
+    title: "Create",
+    layout: "layouts/app",
+  });
+});
+
+app.post(
+  "/contact/store",
+  [
+    body("name").custom(async (value) => {
+      const duplicate = await contact.findOne({ name: value });
+
+      if (duplicate) {
+        throw new Error("Duplicate name");
+      }
+      return true;
+    }),
+    check("email", "Invalid email").isEmail(),
+    check("phone", "Invalide phone").isMobilePhone("id-ID"),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("contact/create", {
+        title: "Create",
+        layout: "layouts/app",
+        errors: errors.array(),
+      });
+    } else {
+      contact.insertMany(req.body, (error, result) => {
+        req.flash("msg", "Saved successfully");
+        res.redirect("/contact");
+      });
+    }
+  }
+);
+
 app.get("/contact/detail/:name", async (req, res) => {
   const contacts = await contact.findOne({ name: req.params.name });
 
@@ -86,6 +130,81 @@ app.get("/contact/detail/:name", async (req, res) => {
     title: "Detail",
     layout: "layouts/app",
     contacts,
+  });
+});
+
+app.get("/contact/edit/:name", async (req, res) => {
+  const contacts = await contact.findOne({ name: req.params.name });
+
+  res.render("contact/edit", {
+    title: "Edit",
+    layout: "layouts/app",
+    contacts,
+  });
+});
+
+app.put(
+  "/contact",
+  [
+    body("name").custom(async (value, { req }) => {
+      const duplicate = await contact.findOne({ name: value });
+
+      if (value !== req.body.oldName && duplicate) {
+        throw new Error("Duplicate name");
+      }
+      return true;
+    }),
+    check("email", "Invalid email").isEmail(),
+    check("phone", "Invalide phone").isMobilePhone("id-ID"),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("contact/edit", {
+        title: "Edit",
+        layout: "layouts/app",
+        errors: errors.array(),
+        contact: req.body,
+      });
+    } else {
+      contact
+        .updateOne(
+          { _id: req.body._id },
+          {
+            $set: {
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+            },
+          }
+        )
+        .then((result) => {
+          req.flash("msg", "Saved successfully");
+          res.redirect("/contact");
+        });
+    }
+  }
+);
+
+// app.get("/contact/destroy/:name", async (req, res) => {
+//   const contacts = await contact.findOne({ name: req.params.name });
+
+//   if (!contacts) {
+//     res.status(404);
+//     res.send("<h1>404</h1>");
+//   } else {
+//     contacts.deleteOne({ _id: contacts._id }).then((result) => {
+//       req.flash("msg", "Deleted successfully");
+//       res.redirect("/contact");
+//     });
+//   }
+// });
+
+app.delete("/contact", (req, res) => {
+  contact.deleteOne({ name: req.body.name }).then((result) => {
+    req.flash("msg", "Deleted successfully");
+    res.redirect("/contact");
   });
 });
 
